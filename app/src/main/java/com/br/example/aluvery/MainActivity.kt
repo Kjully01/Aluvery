@@ -1,9 +1,11 @@
 package com.br.example.aluvery
 
-import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,26 +27,69 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MyFirstComposable() {
-    Text(text = "Teste de texto 1")
-    Text(text = "Teste de texto 2")
+    Text(text = "texto 1")
+    Text(text = "texto 2")
 }
 
-@Preview(
-    showBackground = true,
-    name = "Preview1",
-    showSystemUi = true
-)
-@Preview(
-    name = "Preview2",
-    showBackground = true,
-    showSystemUi = true,
-    uiMode = Configuration.UI_MODE_NIGHT_YES
-)
+@Preview(showBackground = true)
 @Composable
-fun MyFirstComposablePreview() {
+fun ColumnPreview() {
     AluveryTheme {
         Surface {
-            MyFirstComposable()
+            Column {
+                MyFirstComposable()
+            }
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun RowPreview() {
+    AluveryTheme {
+        Surface {
+            Row {
+                MyFirstComposable()
+            }
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun BoxPreview() {
+    AluveryTheme {
+        Surface {
+            Box {
+                MyFirstComposable()
+            }
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun CustomPreview() {
+    AluveryTheme {
+        Surface {
+            Column {
+                Text(text = "texto 1")
+                Text(text = "texto 2")
+                Row {
+                    Text(text = "texto 3")
+                    Text(text = "texto 4")
+                }
+                Box {
+                    Row {
+                        Text(text = "texto 5")
+                        Text(text = "texto 6")
+                    }
+                    Column {
+                        Text(text = "texto 7")
+                        Text(text = "texto 8")
+                    }
+                }
+            }
         }
     }
 }
