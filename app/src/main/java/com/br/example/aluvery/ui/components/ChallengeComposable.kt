@@ -4,6 +4,8 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,8 +18,10 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -28,6 +32,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.style.TextOverflow.Companion.Ellipsis
 import androidx.compose.ui.tooling.preview.Preview
@@ -37,7 +42,9 @@ import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import com.br.example.aluvery.R
 import com.br.example.aluvery.ui.theme.BlueChallenge
+import com.br.example.aluvery.ui.theme.Purple500
 import com.br.example.aluvery.ui.theme.PurpleChallenge
+import com.br.example.aluvery.ui.theme.Teal200
 
 @Preview(showBackground = true)
 @Composable
@@ -129,3 +136,98 @@ fun ProductItemChallenge() {
         }
     }
 }
+
+@Composable
+fun ProductsSectionChallenge() {
+    Column {
+        Text(
+            text = "Promoções",
+            Modifier.padding(start = 16.dp, top = 16.dp, end = 16.dp)
+        )
+        Row(
+            Modifier
+                .padding(top = 8.dp, bottom = 16.dp)
+                .fillMaxWidth()
+                .horizontalScroll(
+                    rememberScrollState()
+                )
+                .padding(horizontal = 16.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            ProductItemChallenge(LoremIpsum(100).values.first())
+            ProductItemChallenge()
+            ProductItemChallenge(LoremIpsum(15).values.first())
+        }
+    }
+}
+
+@Composable
+fun ProductItemChallenge(description: String = "") {
+    Surface(
+        shape = RoundedCornerShape(15.dp),
+        shadowElevation = 4.dp
+    ) {
+        Column(
+            Modifier
+                .width(200.dp)
+                .heightIn(250.dp, 260.dp)
+                .verticalScroll(rememberScrollState())
+        ) {
+            val imageSize = 100.dp
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(imageSize)
+                    .background(brush = Brush.horizontalGradient(listOf(Purple500, Teal200)))
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_launcher_background),
+                    contentDescription = null,
+                    Modifier
+                        .size(imageSize)
+                        .offset(y = imageSize / 2)
+                        .clip(shape = CircleShape)
+                        .align(Alignment.BottomCenter)
+                )
+            }
+            Spacer(modifier = Modifier.height(imageSize / 2))
+            Column(Modifier.padding(16.dp)) {
+                Text(
+                    text = LoremIpsum(50).values.first(),
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight(700),
+                    maxLines = 2,
+                    overflow = Ellipsis
+                )
+                Text(
+                    text = "R$ 14,99",
+                    Modifier.padding(top = 8.dp),
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight(400)
+                )
+            }
+            if (description.isNotEmpty()) {
+                Text(
+                    text = description,
+                    color = Color.White,
+                    modifier = Modifier
+                        .background(Purple500)
+                        .padding(top = 8.dp, start = 16.dp, end = 16.dp, bottom = 16.dp)
+                )
+            }
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun ProductsSectionChallengePreview() {
+    ProductsSectionChallenge()
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun ProductItemChallengePreview() {
+    ProductItemChallenge(LoremIpsum(100).values.first())
+}
+

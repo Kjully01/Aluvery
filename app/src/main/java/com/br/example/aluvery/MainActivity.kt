@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -28,6 +29,7 @@ import androidx.compose.ui.Alignment.Companion.BottomCenter
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow.Companion.Ellipsis
@@ -37,7 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.br.example.aluvery.ui.theme.AluveryTheme
 import com.br.example.aluvery.ui.theme.Purple500
-import com.br.example.aluvery.ui.theme.teal200
+import com.br.example.aluvery.ui.theme.Teal200
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -92,7 +94,7 @@ fun ProductItem() {
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(imageSize)
-                    .background(brush = Brush.horizontalGradient(listOf(Purple500, teal200)))
+                    .background(brush = Brush.horizontalGradient(listOf(Purple500, Teal200)))
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.ic_launcher_background),
