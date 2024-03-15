@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
@@ -49,25 +50,40 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            AluveryTheme {
-                Surface {
-                    ProductsSection()
-                }
+            App()
+        }
+    }
+}
+
+@Composable
+fun App() {
+    AluveryTheme {
+        Surface {
+            Column(
+                Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
+                    .padding(vertical = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                ProductsSection("Promoções")
+                ProductsSection("Doces")
+                ProductsSection("Bebidas")
             }
         }
     }
 }
 
 @Composable
-fun ProductsSection() {
+fun ProductsSection(title: String) {
     Column {
         Text(
-            text = "Promoções",
-            Modifier.padding(start = 16.dp, top = 16.dp, end = 16.dp)
+            text = title,
+            Modifier.padding(start = 16.dp, end = 16.dp)
         )
         Row(
             Modifier
-                .padding(top = 8.dp, bottom = 16.dp)
+                .padding(top = 8.dp)
                 .fillMaxWidth()
                 .horizontalScroll(
                     rememberScrollState()
@@ -149,10 +165,16 @@ fun ProductItem(product: Product) {
     }
 }
 
+@Preview(showSystemUi = true)
+@Composable
+fun AppPreview() {
+    App()
+}
+
 @Preview(showBackground = true)
 @Composable
 private fun ProductsSectionPreview() {
-    ProductsSection()
+    ProductsSection("Example")
 }
 
 @Preview(showBackground = true)
