@@ -7,15 +7,15 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.br.example.aluvery.R
 import com.br.example.aluvery.model.Product
 import com.br.example.aluvery.samples.sampleProducts
-import java.math.BigDecimal
+import com.br.example.aluvery.ui.theme.AluveryTheme
 
 @Composable
 fun ProductsSection(title: String, products: List<Product>) {
@@ -44,5 +44,9 @@ fun ProductsSection(title: String, products: List<Product>) {
 @Preview(showBackground = true)
 @Composable
 private fun ProductsSectionPreview() {
-    ProductsSection("Example", sampleProducts)
+    AluveryTheme {
+        Surface {
+            ProductsSection("Promoções", products = sampleProducts)
+        }
+    }
 }
