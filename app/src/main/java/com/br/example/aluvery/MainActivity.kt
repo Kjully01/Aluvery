@@ -24,8 +24,8 @@ class MainActivity : ComponentActivity() {
 fun App() {
     AluveryTheme {
         Surface {
-//            HomeScreen(sampleSections)
-            AllProductsItem(products = sampleProducts)
+            HomeScreen(sampleSections)
+//            AllProductsItem(products = sampleProducts)
         }
     }
 }
