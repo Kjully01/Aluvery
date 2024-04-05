@@ -1,26 +1,35 @@
 package com.br.example.aluvery.ui.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.br.example.aluvery.R
 import com.br.example.aluvery.extension.toBrazilianCurrency
 import com.br.example.aluvery.model.Product
-import coil.compose.AsyncImage
-import com.br.example.aluvery.samples.sampleProducts
 import com.br.example.aluvery.ui.theme.AluveryTheme
 import java.math.BigDecimal
 
@@ -30,10 +39,12 @@ fun CardProductItem(
     modifier: Modifier = Modifier,
     elevation: Dp = 4.dp
 ) {
+    var expanded by remember { mutableStateOf(false) }
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .heightIn(150.dp),
+            .heightIn(150.dp)
+            .clickable { expanded = !expanded },
         elevation = CardDefaults.cardElevation(elevation)
     ) {
         Column {
@@ -61,11 +72,15 @@ fun CardProductItem(
                     color = Color.Black
                 )
             }
+            val textOverflow = if (expanded) TextOverflow.Visible else TextOverflow.Ellipsis
+            val maxLines = if (expanded) Int.MAX_VALUE else 2
             product.description?.let {
                 Text(
                     text = it,
                     Modifier
-                        .padding(16.dp)
+                        .padding(16.dp),
+                    maxLines = maxLines,
+                    overflow = textOverflow
                 )
             }
         }
