@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
@@ -23,7 +24,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.br.example.aluvery.model.Product
+import com.br.example.aluvery.samples.sampleProducts
 import com.br.example.aluvery.samples.sampleSections
+import com.br.example.aluvery.ui.components.CardProductItem
 import com.br.example.aluvery.ui.components.ProductsSection
 import com.br.example.aluvery.ui.theme.AluveryTheme
 
@@ -37,7 +40,7 @@ fun HomeScreen(sections: Map<String, List<Product>>) {
                 text = it
             },
             Modifier
-                .padding(start = 16.dp, top = 16.dp, end = 16.dp)
+                .padding(16.dp)
                 .fillMaxWidth(),
             shape = RoundedCornerShape(100),
             leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Icone de busca") },
@@ -47,19 +50,25 @@ fun HomeScreen(sections: Map<String, List<Product>>) {
         LazyColumn(
             Modifier
                 .fillMaxSize(),
-            contentPadding = PaddingValues(vertical = 16.dp),
+            contentPadding = PaddingValues(bottom = 16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            sections.forEach { section ->
-                val title = section.key
-                val products = section.value
-                item {
-                    ProductsSection(
-                        title = title,
-                        products = products
-                    )
-                }
+            items(sampleProducts) {
+                CardProductItem(
+                    product = it,
+                    Modifier.padding(horizontal = 16.dp)
+                )
             }
+//            sections.forEach { section ->
+//                val title = section.key
+//                val products = section.value
+//                item {
+//                    ProductsSection(
+//                        title = title,
+//                        products = products
+//                    )
+//                }
+//            }
         }
     }
 }
