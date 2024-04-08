@@ -34,6 +34,14 @@ import com.br.example.aluvery.ui.theme.AluveryTheme
 fun HomeScreen(sections: Map<String, List<Product>>, textInitial: String = "") {
     Column {
         var text by remember { mutableStateOf(textInitial) }
+        val searchedProducts =  remember(text) {
+            if (text.isNotBlank()) {
+                sampleProducts.filter {
+                    it.name.contains(text, ignoreCase = true)
+                            || it.description?.contains(text, ignoreCase = true) ?: false
+                }
+            } else emptyList()
+        }
         OutlinedTextField(
             value = text,
             onValueChange = {
@@ -65,7 +73,7 @@ fun HomeScreen(sections: Map<String, List<Product>>, textInitial: String = "") {
                     }
                 }
             } else {
-                items(sampleProducts) {
+                items(searchedProducts) {
                     CardProductItem(
                         product = it,
                         Modifier.padding(horizontal = 16.dp)
