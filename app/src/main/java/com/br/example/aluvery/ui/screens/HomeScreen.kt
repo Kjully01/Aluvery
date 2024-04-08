@@ -4,17 +4,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.Icon
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -28,13 +21,15 @@ import com.br.example.aluvery.samples.sampleProducts
 import com.br.example.aluvery.samples.sampleSections
 import com.br.example.aluvery.ui.components.CardProductItem
 import com.br.example.aluvery.ui.components.ProductsSection
+import com.br.example.aluvery.ui.components.SearchTextField
 import com.br.example.aluvery.ui.theme.AluveryTheme
 
 @Composable
-fun HomeScreen(sections: Map<String, List<Product>>, textInitial: String = "") {
+fun HomeScreen(sections: Map<String, List<Product>>, searchText: String = "") {
     Column {
-        var text by remember { mutableStateOf(textInitial) }
-        val searchedProducts =  remember(text) {
+        var text by remember { mutableStateOf(searchText) }
+        SearchTextField(searchText = text, onSearchChange = { text = it })
+        val searchedProducts = remember(text) {
             if (text.isNotBlank()) {
                 sampleProducts.filter {
                     it.name.contains(text, ignoreCase = true)
@@ -42,19 +37,6 @@ fun HomeScreen(sections: Map<String, List<Product>>, textInitial: String = "") {
                 }
             } else emptyList()
         }
-        OutlinedTextField(
-            value = text,
-            onValueChange = {
-                text = it
-            },
-            Modifier
-                .padding(16.dp)
-                .fillMaxWidth(),
-            shape = RoundedCornerShape(100),
-            leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Icone de busca") },
-            label = { Text(text = "Produto") },
-            placeholder = { Text(text = "O que você procura?") }
-        )
         LazyColumn(
             Modifier
                 .fillMaxSize(),
