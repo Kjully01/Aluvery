@@ -31,9 +31,9 @@ import com.br.example.aluvery.ui.components.ProductsSection
 import com.br.example.aluvery.ui.theme.AluveryTheme
 
 @Composable
-fun HomeScreen(sections: Map<String, List<Product>>) {
+fun HomeScreen(sections: Map<String, List<Product>>, textInitial: String = "") {
     Column {
-        var text by remember { mutableStateOf("") }
+        var text by remember { mutableStateOf(textInitial) }
         OutlinedTextField(
             value = text,
             onValueChange = {
@@ -53,22 +53,25 @@ fun HomeScreen(sections: Map<String, List<Product>>) {
             contentPadding = PaddingValues(bottom = 16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            items(sampleProducts) {
-                CardProductItem(
-                    product = it,
-                    Modifier.padding(horizontal = 16.dp)
-                )
+            if (text.isBlank()) {
+                sections.forEach { section ->
+                    val title = section.key
+                    val products = section.value
+                    item {
+                        ProductsSection(
+                            title = title,
+                            products = products
+                        )
+                    }
+                }
+            } else {
+                items(sampleProducts) {
+                    CardProductItem(
+                        product = it,
+                        Modifier.padding(horizontal = 16.dp)
+                    )
+                }
             }
-//            sections.forEach { section ->
-//                val title = section.key
-//                val products = section.value
-//                item {
-//                    ProductsSection(
-//                        title = title,
-//                        products = products
-//                    )
-//                }
-//            }
         }
     }
 }
@@ -79,6 +82,16 @@ private fun HomeScreenPreview() {
     AluveryTheme {
         Surface {
             HomeScreen(sampleSections)
+        }
+    }
+}
+
+@Preview(showSystemUi = true)
+@Composable
+private fun HomeScreenTextInitialPreview() {
+    AluveryTheme {
+        Surface {
+            HomeScreen(sampleSections, "a")
         }
     }
 }
