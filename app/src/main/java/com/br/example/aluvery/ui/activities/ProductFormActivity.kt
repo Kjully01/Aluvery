@@ -32,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -41,6 +42,7 @@ import com.br.example.aluvery.R
 import com.br.example.aluvery.model.Product
 import com.br.example.aluvery.ui.theme.AluveryTheme
 import java.math.BigDecimal
+import java.text.DecimalFormat
 
 class ProductFormActivity : ComponentActivity() {
 
@@ -80,6 +82,10 @@ fun ProductFormScreen() {
         var price by remember { mutableStateOf("") }
         var description by remember { mutableStateOf("") }
 
+        val formatter = remember {
+            DecimalFormat("#.##")
+        }
+
         if (url.isNotBlank()) {
             AsyncImage(
                 model = url, contentDescription = null,
@@ -117,12 +123,23 @@ fun ProductFormScreen() {
                 Text(text = "Nome")
             },
             keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Next
+                imeAction = ImeAction.Next,
+                capitalization = KeyboardCapitalization.Words
             )
         )
         TextField(
-            value = price, onValueChange = {
-                price = it
+            value = price,
+            onValueChange = {
+                price = try {
+                    formatter.format(BigDecimal(it))
+                } catch (e: IllegalArgumentException) {
+                    if (it.isBlank()) {
+                        it
+                    } else {
+                        "0.0"
+                    }
+                }
+
             },
             Modifier
                 .fillMaxWidth(),
@@ -143,7 +160,10 @@ fun ProductFormScreen() {
                 .heightIn(min = 100.dp),
             label = {
                 Text(text = "Descrição")
-            }
+            },
+            keyboardOptions = KeyboardOptions(
+                capitalization = KeyboardCapitalization.Sentences
+            )
         )
         Button(onClick = {
             val convertPrice = try {
