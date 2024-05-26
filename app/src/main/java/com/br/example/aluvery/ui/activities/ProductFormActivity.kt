@@ -1,10 +1,13 @@
 package com.br.example.aluvery.ui.activities
 
 import android.os.Bundle
+import android.text.InputFilter
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,6 +15,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -22,10 +29,17 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
+import com.br.example.aluvery.R
+import com.br.example.aluvery.model.Product
 import com.br.example.aluvery.ui.theme.AluveryTheme
+import java.math.BigDecimal
 
 class ProductFormActivity : ComponentActivity() {
 
@@ -48,7 +62,8 @@ fun ProductFormScreen() {
     Column(
         Modifier
             .fillMaxSize()
-            .padding(horizontal = 16.dp),
+            .padding(horizontal = 16.dp)
+            .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Text(
@@ -63,6 +78,17 @@ fun ProductFormScreen() {
         var name by remember { mutableStateOf("") }
         var price by remember { mutableStateOf("") }
         var description by remember { mutableStateOf("") }
+
+        if (url.isNotBlank()) {
+            AsyncImage(model = url, contentDescription = null,
+                Modifier
+                    .fillMaxWidth()
+                    .height(200.dp),
+                contentScale = ContentScale.Crop,
+                placeholder = painterResource(id = R.drawable.placeholder),
+                error = painterResource(id = R.drawable.placeholder)
+            )
+        }
 
         TextField(
             value = url,
@@ -93,7 +119,8 @@ fun ProductFormScreen() {
                 .fillMaxWidth(),
             label = {
                 Text(text = "Preço")
-            }
+            },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
         )
         TextField(
             value = description, onValueChange = {
@@ -106,9 +133,23 @@ fun ProductFormScreen() {
                 Text(text = "Descrição")
             }
         )
-        Button(onClick = { /*TODO*/ }, Modifier.fillMaxWidth()) {
+        Button(onClick = {
+            val convertPrice = try {
+                BigDecimal(price)
+            } catch (e: Exception) {
+                BigDecimal.ZERO
+            }
+            val product = Product(
+                name = name,
+                price = convertPrice,
+                image = url,
+                description = description
+            )
+            Log.i("ProductForm", product.toString())
+        }, Modifier.fillMaxWidth()) {
             Text(text = "Salvar")
         }
+        Spacer(modifier = Modifier)
     }
 }
 
