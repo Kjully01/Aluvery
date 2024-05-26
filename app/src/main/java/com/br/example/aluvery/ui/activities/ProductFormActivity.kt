@@ -31,6 +31,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -80,7 +81,8 @@ fun ProductFormScreen() {
         var description by remember { mutableStateOf("") }
 
         if (url.isNotBlank()) {
-            AsyncImage(model = url, contentDescription = null,
+            AsyncImage(
+                model = url, contentDescription = null,
                 Modifier
                     .fillMaxWidth()
                     .height(200.dp),
@@ -99,7 +101,11 @@ fun ProductFormScreen() {
                 .fillMaxWidth(),
             label = {
                 Text(text = "Url da Imagem")
-            }
+            },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Uri,
+                imeAction = ImeAction.Next
+            )
         )
         TextField(
             value = name, onValueChange = {
@@ -109,7 +115,10 @@ fun ProductFormScreen() {
                 .fillMaxWidth(),
             label = {
                 Text(text = "Nome")
-            }
+            },
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Next
+            )
         )
         TextField(
             value = price, onValueChange = {
@@ -120,7 +129,10 @@ fun ProductFormScreen() {
             label = {
                 Text(text = "Preço")
             },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Decimal,
+                imeAction = ImeAction.Next
+            )
         )
         TextField(
             value = description, onValueChange = {
