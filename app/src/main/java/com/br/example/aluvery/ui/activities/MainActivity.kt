@@ -34,7 +34,7 @@ class MainActivity : ComponentActivity() {
                 startActivity(Intent(this, ProductFormActivity::class.java))
             }) {
                 val sections = mapOf(
-//                    "Todos os produtos" to dao.products(),
+                    "Todos os produtos" to dao.products(),
                     "Promoções" to sampleDrinks + sampleCandies,
                     "Doces" to sampleCandies,
                     "Bebidas" to sampleDrinks
@@ -65,5 +65,7 @@ fun App(onFabClick: () -> Unit = {}, content: @Composable () -> Unit = {}) {
 @Preview
 @Composable
 private fun AppPreview() {
-    App()
+    App {
+        HomeScreen(sections = sampleSections)
+    }
 }
