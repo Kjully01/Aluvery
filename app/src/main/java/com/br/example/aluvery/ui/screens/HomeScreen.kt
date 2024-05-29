@@ -27,6 +27,7 @@ import com.br.example.aluvery.ui.theme.AluveryTheme
 class HomeScreenUiState(searchText: String = "") {
 
     var text by mutableStateOf(searchText)
+        private set
 
     val searchedProducts
         get() =
@@ -41,20 +42,21 @@ class HomeScreenUiState(searchText: String = "") {
         return text.isBlank()
     }
 
+    val onSearchChange: (String) -> Unit = { searchText ->
+        text = searchText
+    }
+
 }
 
 @Composable
-fun HomeScreen(sections: Map<String, List<Product>>, searchText: String = "") {
+fun HomeScreen(sections: Map<String, List<Product>>, state: HomeScreenUiState = HomeScreenUiState()) {
     Column {
-        val state = remember {
-            HomeScreenUiState(searchText)
-        }
         val text = state.text
         val searchedProducts = remember(text) {
             state.searchedProducts
         }
 
-        SearchTextField(searchText = text, onSearchChange = { state.text = it })
+        SearchTextField(searchText = text, onSearchChange = state.onSearchChange)
         LazyColumn(
             Modifier
                 .fillMaxSize(),
@@ -99,7 +101,7 @@ private fun HomeScreenPreview() {
 private fun HomeScreenTextInitialPreview() {
     AluveryTheme {
         Surface {
-            HomeScreen(sampleSections, "a")
+            HomeScreen(sampleSections, HomeScreenUiState("a"))
         }
     }
 }
