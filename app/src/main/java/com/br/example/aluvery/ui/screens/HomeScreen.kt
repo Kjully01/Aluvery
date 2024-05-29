@@ -24,26 +24,44 @@ import com.br.example.aluvery.ui.components.ProductsSection
 import com.br.example.aluvery.ui.components.SearchTextField
 import com.br.example.aluvery.ui.theme.AluveryTheme
 
-@Composable
-fun HomeScreen(sections: Map<String, List<Product>>, searchText: String = "") {
-    Column {
-        var text by remember { mutableStateOf(searchText) }
-        SearchTextField(searchText = text, onSearchChange = { text = it })
-        val searchedProducts = remember(text) {
+class HomeScreenUiState(searchText: String = "") {
+
+    var text by mutableStateOf(searchText)
+
+    val searchedProducts
+        get() =
             if (text.isNotBlank()) {
                 sampleProducts.filter {
                     it.name.contains(text, ignoreCase = true)
                             || it.description?.contains(text, ignoreCase = true) ?: false
                 }
             } else emptyList()
+
+    fun isShowSections(): Boolean {
+        return text.isBlank()
+    }
+
+}
+
+@Composable
+fun HomeScreen(sections: Map<String, List<Product>>, searchText: String = "") {
+    Column {
+        val state = remember {
+            HomeScreenUiState(searchText)
         }
+        val text = state.text
+        val searchedProducts = remember(text) {
+            state.searchedProducts
+        }
+
+        SearchTextField(searchText = text, onSearchChange = { state.text = it })
         LazyColumn(
             Modifier
                 .fillMaxSize(),
             contentPadding = PaddingValues(bottom = 16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            if (text.isBlank()) {
+            if (state.isShowSections()) {
                 sections.forEach { section ->
                     val title = section.key
                     val products = section.value
