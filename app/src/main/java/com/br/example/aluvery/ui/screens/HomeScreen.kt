@@ -24,7 +24,10 @@ import com.br.example.aluvery.ui.components.ProductsSection
 import com.br.example.aluvery.ui.components.SearchTextField
 import com.br.example.aluvery.ui.theme.AluveryTheme
 
-class HomeScreenUiState(searchText: String = "") {
+class HomeScreenUiState(
+    val sections: Map<String, List<Product>> = emptyMap(),
+    searchText: String = ""
+) {
 
     var text by mutableStateOf(searchText)
         private set
@@ -49,7 +52,7 @@ class HomeScreenUiState(searchText: String = "") {
 }
 
 @Composable
-fun HomeScreen(sections: Map<String, List<Product>>, state: HomeScreenUiState = HomeScreenUiState()) {
+fun HomeScreen(state: HomeScreenUiState = HomeScreenUiState()) {
     Column {
         val text = state.text
         val searchedProducts = remember(text) {
@@ -64,7 +67,7 @@ fun HomeScreen(sections: Map<String, List<Product>>, state: HomeScreenUiState = 
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             if (state.isShowSections()) {
-                sections.forEach { section ->
+                state.sections.forEach { section ->
                     val title = section.key
                     val products = section.value
                     item {
@@ -91,7 +94,7 @@ fun HomeScreen(sections: Map<String, List<Product>>, state: HomeScreenUiState = 
 private fun HomeScreenPreview() {
     AluveryTheme {
         Surface {
-            HomeScreen(sampleSections)
+            HomeScreen(HomeScreenUiState(sections = sampleSections))
         }
     }
 }
@@ -101,7 +104,7 @@ private fun HomeScreenPreview() {
 private fun HomeScreenTextInitialPreview() {
     AluveryTheme {
         Surface {
-            HomeScreen(sampleSections, HomeScreenUiState("a"))
+            HomeScreen(HomeScreenUiState(sections = sampleSections, searchText = "a"))
         }
     }
 }
