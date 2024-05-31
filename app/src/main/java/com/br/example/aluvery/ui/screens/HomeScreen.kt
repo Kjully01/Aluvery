@@ -9,10 +9,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -26,31 +22,13 @@ import com.br.example.aluvery.ui.theme.AluveryTheme
 
 class HomeScreenUiState(
     val sections: Map<String, List<Product>> = emptyMap(),
-    private val products: List<Product> = emptyList(),
-    searchText: String = ""
+    val searchedProducts: List<Product> = emptyList(),
+    val searchText: String = "",
+    val onSearchChange: (String) -> Unit = {}
 ) {
 
-    var text by mutableStateOf(searchText)
-        private set
-
-    val searchedProducts
-        get() =
-            if (text.isNotBlank()) {
-                sampleProducts.filter(containsInNameOrDescription()) +
-                products.filter(containsInNameOrDescription())
-            } else emptyList()
-
-    private fun containsInNameOrDescription(): (Product) -> Boolean = {
-        it.name.contains(text, ignoreCase = true)
-                || it.description?.contains(text, ignoreCase = true) ?: false
-    }
-
     fun isShowSections(): Boolean {
-        return text.isBlank()
-    }
-
-    val onSearchChange: (String) -> Unit = { searchText ->
-        text = searchText
+        return searchText.isBlank()
     }
 
 }
@@ -58,10 +36,9 @@ class HomeScreenUiState(
 @Composable
 fun HomeScreen(state: HomeScreenUiState = HomeScreenUiState()) {
     Column {
-        val text = state.text
-        val searchedProducts = remember(text) {
-            state.searchedProducts
-        }
+        val sections = state.sections
+        val text = state.searchText
+        val searchedProducts = state.searchedProducts
 
         SearchTextField(searchText = text, onSearchChange = state.onSearchChange)
         LazyColumn(
