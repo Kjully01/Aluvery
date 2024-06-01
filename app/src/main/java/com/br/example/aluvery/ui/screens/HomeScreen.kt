@@ -100,7 +100,7 @@ fun HomeScreen(state: HomeScreenUiState = HomeScreenUiState()) {
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             if (state.isShowSections()) {
-                state.sections.forEach { section ->
+                sections.forEach { section ->
                     val title = section.key
                     val products = section.value
                     item {
