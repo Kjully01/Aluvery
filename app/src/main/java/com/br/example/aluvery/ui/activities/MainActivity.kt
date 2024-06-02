@@ -26,8 +26,8 @@ import com.br.example.aluvery.samples.sampleCandies
 import com.br.example.aluvery.samples.sampleDrinks
 import com.br.example.aluvery.samples.sampleProducts
 import com.br.example.aluvery.samples.sampleSections
+import com.br.example.aluvery.states.HomeScreenUiState
 import com.br.example.aluvery.ui.screens.HomeScreen
-import com.br.example.aluvery.ui.screens.HomeScreenUiState
 import com.br.example.aluvery.ui.theme.AluveryTheme
 
 class MainActivity : ComponentActivity() {

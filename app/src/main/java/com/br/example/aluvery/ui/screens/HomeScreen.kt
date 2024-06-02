@@ -21,23 +21,11 @@ import com.br.example.aluvery.samples.sampleCandies
 import com.br.example.aluvery.samples.sampleDrinks
 import com.br.example.aluvery.samples.sampleProducts
 import com.br.example.aluvery.samples.sampleSections
+import com.br.example.aluvery.states.HomeScreenUiState
 import com.br.example.aluvery.ui.components.CardProductItem
 import com.br.example.aluvery.ui.components.ProductsSection
 import com.br.example.aluvery.ui.components.SearchTextField
 import com.br.example.aluvery.ui.theme.AluveryTheme
-
-class HomeScreenUiState(
-    val sections: Map<String, List<Product>> = emptyMap(),
-    val searchedProducts: List<Product> = emptyList(),
-    val searchText: String = "",
-    val onSearchChange: (String) -> Unit = {}
-) {
-
-    fun isShowSections(): Boolean {
-        return searchText.isBlank()
-    }
-
-}
 
 @Composable
 fun HomeScreen(products: List<Product>) {
