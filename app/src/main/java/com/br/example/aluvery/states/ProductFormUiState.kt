@@ -1,42 +1,17 @@
 package com.br.example.aluvery.states
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import java.math.BigDecimal
-
-class ProductFormUiState {
-    var url by mutableStateOf("")
-        private set
-    var name by mutableStateOf("")
-    var price by mutableStateOf("")
-    var description by mutableStateOf("")
-    var isPriceError by mutableStateOf(false)
+class ProductFormUiState(
+    val url: String = "",
+    val name: String = "",
+    val price: String = "",
+    val description: String = "",
+    val onValueChangeUrl: (String) -> Unit = {},
+    val onValueChangeName: (String) -> Unit = {},
+    val onValueChangePrice: (String) -> Unit = {},
+    val onValueChangeDescription: (String) -> Unit = {}
+) {
 
     fun isShowImage(): Boolean {
         return url.isNotBlank()
-    }
-
-    val onValueChangeUrl: (String) -> Unit = {
-        url = it
-    }
-
-    val onValueChangeName: (String) -> Unit = {
-        name = it
-    }
-
-    val onValueChangePrice: (String) -> Unit = {
-        isPriceError = try {
-            BigDecimal(it)
-            false
-        } catch (e: IllegalArgumentException) {
-            it.isNotEmpty()
-        }
-        price = it
-    }
-
-    val onValueChangeDescription: (String) -> Unit = {
-        description = it
     }
 }
