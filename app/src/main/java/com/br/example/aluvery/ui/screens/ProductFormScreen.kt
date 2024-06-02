@@ -12,6 +12,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -36,7 +37,6 @@ import com.br.example.aluvery.model.Product
 import com.br.example.aluvery.states.ProductFormUiState
 import com.br.example.aluvery.ui.theme.AluveryTheme
 import java.math.BigDecimal
-import java.text.DecimalFormat
 
 private val dao = ProductDao()
 
@@ -56,9 +56,7 @@ fun ProductFormScreen(
     var description by remember {
         mutableStateOf("")
     }
-    val formatter = remember {
-        DecimalFormat("#.##")
-    }
+
     ProductFormScreen(
         state = ProductFormUiState(
             url = url,
@@ -72,13 +70,7 @@ fun ProductFormScreen(
                 name = it
             },
             onValueChangePrice = {
-                try {
-                    price = formatter.format(BigDecimal(it))
-                } catch (e: IllegalArgumentException) {
-                    if (it.isBlank()) {
-                        price = it
-                    }
-                }
+                price = it
             },
             onValueChangeDescription = {
                 description = it
@@ -115,9 +107,10 @@ fun ProductFormScreen(
     ) {
 
         val url = state.url
-        var name = state.name
-        var price = state.price
-        var description = state.description
+        val name = state.name
+        val price = state.price
+        val description = state.description
+        val isPriceError = state.isPriceError(price)
 
         Text(
             text = "Criando o produto",
@@ -167,11 +160,9 @@ fun ProductFormScreen(
         Column {
             TextField(
                 value = price,
-                onValueChange = {
-                    state.onValueChangePrice
-                },
+                onValueChange = state.onValueChangePrice,
                 Modifier.fillMaxWidth(),
-//                isError = isPriceError,
+                isError = isPriceError,
                 label = {
                     Text(text = "Preço")
                 },
@@ -181,14 +172,14 @@ fun ProductFormScreen(
                     imeAction = ImeAction.Next,
                 ),
             )
-//            if (isPriceError) {
-//                Text(
-//                    text = "Preço deve ser um número decimal",
-//                    color = MaterialTheme.colorScheme.error,
-//                    style = MaterialTheme.typography.labelSmall,
-//                    modifier = Modifier.padding(start = 16.dp)
-//                )
-//            }
+            if (isPriceError) {
+                Text(
+                    text = "Preço deve ser um número decimal",
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.labelSmall,
+                    modifier = Modifier.padding(start = 16.dp)
+                )
+            }
         }
         TextField(
             value = description, onValueChange = state.onValueChangeDescription,
