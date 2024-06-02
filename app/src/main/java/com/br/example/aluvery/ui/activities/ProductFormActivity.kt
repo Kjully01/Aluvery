@@ -57,10 +57,13 @@ class ProductFormActivity : ComponentActivity() {
         setContent {
             AluveryTheme {
                 Surface {
+                    val state = ProductFormUiState()
                     ProductFormScreen(onSaveClick = {product ->
                         dao.save(product)
                         finish()
-                    } )
+                    },
+                        state = state)
+
                 }
             }
         }
@@ -70,7 +73,8 @@ class ProductFormActivity : ComponentActivity() {
 
 @Composable
 fun ProductFormScreen(
-    onSaveClick: (Product) -> Unit = {}
+    onSaveClick: (Product) -> Unit = {},
+    state: ProductFormUiState = ProductFormUiState()
 ) {
     Column(
         Modifier
@@ -80,9 +84,6 @@ fun ProductFormScreen(
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
 
-        val state = remember {
-            ProductFormUiState()
-        }
         val url = state.url
         var name = state.name
         var price = state.price
@@ -111,9 +112,7 @@ fun ProductFormScreen(
 
         TextField(
             value = url,
-            onValueChange = {
-                state.url = it
-            },
+            onValueChange = state.onValueChangeUrl,
             Modifier
                 .fillMaxWidth(),
             label = {
@@ -125,9 +124,7 @@ fun ProductFormScreen(
             )
         )
         TextField(
-            value = name, onValueChange = {
-                state.name = it
-            },
+            value = name, onValueChange = state.onValueChangeName,
             Modifier
                 .fillMaxWidth(),
             label = {
@@ -142,13 +139,7 @@ fun ProductFormScreen(
             TextField(
                 value = price,
                 onValueChange = {
-                    isPriceError = try {
-                        BigDecimal(it)
-                        false
-                    } catch (e: IllegalArgumentException) {
-                        it.isNotEmpty()
-                    }
-                    state.price = it
+                    state.onValueChangePrice
                 },
                 Modifier.fillMaxWidth(),
                 isError = isPriceError,
@@ -171,9 +162,7 @@ fun ProductFormScreen(
             }
         }
         TextField(
-            value = description, onValueChange = {
-                state.description = it
-            },
+            value = description, onValueChange = state.onValueChangeDescription,
             Modifier
                 .fillMaxWidth()
                 .heightIn(min = 100.dp),
