@@ -37,9 +37,10 @@ import java.math.BigDecimal
 fun CardProductItem(
     product: Product,
     modifier: Modifier = Modifier,
-    elevation: Dp = 4.dp
+    elevation: Dp = 4.dp,
+    isExpanded: Boolean = false
 ) {
-    var expanded by remember { mutableStateOf(false) }
+    var expanded by remember { mutableStateOf(isExpanded) }
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -74,7 +75,7 @@ fun CardProductItem(
             }
             val textOverflow = if (expanded) TextOverflow.Visible else TextOverflow.Ellipsis
             val maxLines = if (expanded) Int.MAX_VALUE else 2
-            product.description?.let {
+            product.description?.takeIf { it.isNotEmpty() }?.let {
                 Text(
                     text = it,
                     Modifier
@@ -104,6 +105,22 @@ private fun CardProductItemPreview() {
 
 @Preview
 @Composable
+private fun CardProductItemWithDescriptionEmpty() {
+    AluveryTheme {
+        Surface {
+            CardProductItem(
+                product = Product(
+                    "teste",
+                    BigDecimal(9.99),
+                    description = ""
+                )
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
 private fun CardProductItemWithDescription() {
     AluveryTheme {
         Surface {
@@ -113,6 +130,23 @@ private fun CardProductItemWithDescription() {
                     price = BigDecimal(9.99),
                     description = LoremIpsum(20).values.first()
                 )
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun CardProductItemWithDescriptionExpanded() {
+    AluveryTheme {
+        Surface {
+            CardProductItem(
+                product = Product(
+                    name = "teste",
+                    price = BigDecimal(9.99),
+                    description = LoremIpsum(20).values.first()
+                ),
+                isExpanded = true
             )
         }
     }
