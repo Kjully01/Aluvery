@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
@@ -21,10 +22,9 @@ import com.br.example.aluvery.samples.sampleSections
 import com.br.example.aluvery.states.HomeScreenUiState
 import com.br.example.aluvery.ui.screens.HomeScreen
 import com.br.example.aluvery.ui.theme.AluveryTheme
+import com.br.example.aluvery.ui.viewmodels.HomeScreenViewModel
 
 class MainActivity : ComponentActivity() {
-
-    private val dao = ProductDao()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,8 +32,10 @@ class MainActivity : ComponentActivity() {
             App(onFabClick = {
                 startActivity(Intent(this, ProductFormActivity::class.java))
             }) {
-                val products = dao.products()
-                HomeScreen(products = products)
+                val viewModel by viewModels<HomeScreenViewModel>()
+                HomeScreen(
+                    viewModel = viewModel
+                )
             }
         }
     }
