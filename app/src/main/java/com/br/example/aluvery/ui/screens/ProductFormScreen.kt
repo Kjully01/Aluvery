@@ -19,10 +19,6 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -35,37 +31,26 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.br.example.aluvery.R
 import com.br.example.aluvery.dao.ProductDao
-import com.br.example.aluvery.model.Product
 import com.br.example.aluvery.states.ProductFormUiState
 import com.br.example.aluvery.ui.theme.AluveryTheme
 import com.br.example.aluvery.ui.viewmodels.ProductFormScreenViewModel
-import java.math.BigDecimal
 
 private val dao = ProductDao()
 
 @Composable
 fun ProductFormScreen(
     viewModel: ProductFormScreenViewModel,
-    onSaveClick: (Product) -> Unit = {}
+    onSaveClick: () -> Unit = {}
 ) {
     val state by viewModel.uiState.collectAsState()
     ProductFormScreen(
-        state = state
+        state = state,
+        onSaveClick = {
+            viewModel.save()
+            onSaveClick()
+        }
     )
 }
-
-//onSaveClick = {
-//            val convertedPrice = try {
-//                BigDecimal(price)
-//            } catch (e: NumberFormatException) {
-//                BigDecimal.ZERO
-//            }
-//            val product = Product(
-//                name = name,
-//                image = url,
-//                price = convertedPrice,
-//                description = description
-//            )
 
 @Composable
 fun ProductFormScreen(
@@ -94,7 +79,7 @@ fun ProductFormScreen(
             fontSize = 28.sp
         )
 
-        if (state.isShowImage()) {
+        if (state.isShowImage) {
             AsyncImage(
                 model = url, contentDescription = null,
                 Modifier

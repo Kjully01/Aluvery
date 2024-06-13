@@ -22,7 +22,5 @@ data class ProductFormUiState(
         }
     }
 
-    fun isShowImage(): Boolean {
-        return url.isNotBlank()
-    }
+    val isShowImage: Boolean get() = url.isNotBlank()
 }

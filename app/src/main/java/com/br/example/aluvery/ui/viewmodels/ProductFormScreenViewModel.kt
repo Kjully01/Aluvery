@@ -1,14 +1,13 @@
 package com.br.example.aluvery.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.br.example.aluvery.samples.sampleCandies
-import com.br.example.aluvery.samples.sampleDrinks
+import com.br.example.aluvery.dao.ProductDao
+import com.br.example.aluvery.model.Product
 import com.br.example.aluvery.states.ProductFormUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
+import java.math.BigDecimal
 
 class ProductFormScreenViewModel : ViewModel() {
 
@@ -16,6 +15,7 @@ class ProductFormScreenViewModel : ViewModel() {
         ProductFormUiState()
     )
     val uiState get() = _uiState.asStateFlow()
+    private val dao = ProductDao()
 
     init {
         _uiState.update { currentState ->
@@ -41,6 +41,23 @@ class ProductFormScreenViewModel : ViewModel() {
                     )
                 }
             )
+        }
+    }
+
+    fun save() {
+        _uiState.value.run {
+            val convertedPrice = try {
+                BigDecimal(price)
+            } catch (e: NumberFormatException) {
+                BigDecimal.ZERO
+            }
+            val product = Product(
+                name = name,
+                image = url,
+                price = convertedPrice,
+                description = description
+            )
+            dao.save(product)
         }
     }
 }
