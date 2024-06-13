@@ -9,18 +9,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.br.example.aluvery.model.Product
-import com.br.example.aluvery.samples.sampleCandies
-import com.br.example.aluvery.samples.sampleDrinks
-import com.br.example.aluvery.samples.sampleProducts
 import com.br.example.aluvery.samples.sampleSections
 import com.br.example.aluvery.states.HomeScreenUiState
 import com.br.example.aluvery.ui.components.CardProductItem
@@ -33,8 +26,7 @@ import com.br.example.aluvery.ui.viewmodels.HomeScreenViewModel
 fun HomeScreen(
     viewModel: HomeScreenViewModel
 ) {
-    val state = viewModel.uiState
-
+    val state by viewModel.uiState.collectAsState()
     HomeScreen(state = state)
 }
 
