@@ -17,6 +17,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,62 +38,34 @@ import com.br.example.aluvery.dao.ProductDao
 import com.br.example.aluvery.model.Product
 import com.br.example.aluvery.states.ProductFormUiState
 import com.br.example.aluvery.ui.theme.AluveryTheme
+import com.br.example.aluvery.ui.viewmodels.ProductFormScreenViewModel
 import java.math.BigDecimal
 
 private val dao = ProductDao()
 
 @Composable
 fun ProductFormScreen(
+    viewModel: ProductFormScreenViewModel,
     onSaveClick: (Product) -> Unit = {}
 ) {
-    var name by rememberSaveable {
-        mutableStateOf("")
-    }
-    var url by rememberSaveable {
-        mutableStateOf("")
-    }
-    var price by rememberSaveable {
-        mutableStateOf("")
-    }
-    var description by rememberSaveable {
-        mutableStateOf("")
-    }
-
+    val state by viewModel.uiState.collectAsState()
     ProductFormScreen(
-        state = ProductFormUiState(
-            url = url,
-            name = name,
-            price = price,
-            description = description,
-            onValueChangeUrl = {
-                url = it
-            },
-            onValueChangeName = {
-                name = it
-            },
-            onValueChangePrice = {
-                price = it
-            },
-            onValueChangeDescription = {
-                description = it
-            }
-        ),
-        onSaveClick = {
-            val convertedPrice = try {
-                BigDecimal(price)
-            } catch (e: NumberFormatException) {
-                BigDecimal.ZERO
-            }
-            val product = Product(
-                name = name,
-                image = url,
-                price = convertedPrice,
-                description = description
-            )
-            onSaveClick(product)
-        }
+        state = state
     )
 }
+
+//onSaveClick = {
+//            val convertedPrice = try {
+//                BigDecimal(price)
+//            } catch (e: NumberFormatException) {
+//                BigDecimal.ZERO
+//            }
+//            val product = Product(
+//                name = name,
+//                image = url,
+//                price = convertedPrice,
+//                description = description
+//            )
 
 @Composable
 fun ProductFormScreen(

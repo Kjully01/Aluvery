@@ -2,7 +2,7 @@ package com.br.example.aluvery.states
 
 import java.math.BigDecimal
 
-class ProductFormUiState(
+data class ProductFormUiState(
     val url: String = "",
     val name: String = "",
     val price: String = "",
